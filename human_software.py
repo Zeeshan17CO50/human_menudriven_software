@@ -1,12 +1,15 @@
 import pyttsx3
 import os
+
 pyttsx3.speak("Welcome to my tools:")
 # software_list = ["notepad", "firefox", "calc", "chrome", "exit"]
 # firefox,ping,calc,exit
+
+# creating software lists txt files
 with open('software_lists.txt', 'w+') as f:
     isEmpty = f.read().strip()
     if isEmpty == "":
-        previous = "firefox,ping,calc,exit"
+        previous = "chrome,firefox,calc,notepad,exit"
         software_list = list(previous.split(","))
         f.write(previous)
     # print(software_list)
@@ -18,6 +21,7 @@ while True:
     print("------------------------------------------------------------------------")
     ch = int(input("Enter your choice: "))
 
+    # To ask query using text for element in software_list
     if ch == 1:
         pyttsx3.speak(
             "What task should we do for you please mention in the query..")
@@ -26,6 +30,7 @@ while True:
         software = "".join(
             [element for element in software_list if element in query.lower()])
 
+        # Check and open the software for element in software_list
         if (("open" in query.lower() or "run" in query.lower() or "execute" in query.lower()) and (software != "")):
             os.system(software)
         elif("close" in query.lower() or "exit" in query.lower() or "kill" in query.lower() or "quit" in query.lower()):
@@ -36,15 +41,20 @@ while True:
         else:
             print("\nThe item you are looking for does not exist")
 
+    # Providing hint section for the user
     elif ch == 2:
         pyttsx3.speak(
             "We provide you a hint section if you don't like to use query just press the mention numbers.")
         while True:
+            print(
+                "------------------------------------------------------------------------")
             print("\t\t\t\tHINT\t\t\t\t")
             count = 1
             for element in software_list:
                 print(str(count)+". "+element.capitalize())
                 count += 1
+            print(
+                "------------------------------------------------------------------------")
             hint_ch = int(input("Enter your choice: "))
 
             if hint_ch > len(software_list):
@@ -56,23 +66,32 @@ while True:
             else:
                 os.system(software_list[hint_ch - 1])
 
+    # Modify the menu item files
     elif ch == 3:
         while True:
-            print("\n\t\t\t\tCURRENT SOFTWARE LIST\t\t\t\t")
+            print(
+                "------------------------------------------------------------------------------------------------")
+            print("\t\t\t\tCURRENT SOFTWARE LIST\t\t\t\t")
             count = 1
             for element in software_list:
                 print(str(count)+". "+element.capitalize())
                 count += 1
                 if count == len(software_list):
                     break
-            print("\n\t\t\t\tMODIFY SOFTWARE LIST\t\t\t\t")
+            print(
+                "------------------------------------------------------------------------------------------------")
+            print("\t\t\t\tMODIFY SOFTWARE LIST\t\t\t\t")
             print("\n1. Insert\n2. Delete\n3. Exit")
+            print(
+                "------------------------------------------------------------------------------------------------")
             modify_list_ch = int(input("Enter your choice: "))
 
             if modify_list_ch == 1:
-                insert = input("Enter new software: ")
+                insert = input("Enter new software: ").lower()
+                # checking software is available in the list
                 if insert in software_list:
                     print("\nSoftware already present.")
+                # insert the software when it is not available in the list
                 else:
                     software_list.insert(len(software_list) - 1, insert)
                     pyttsx3.speak(
@@ -82,6 +101,7 @@ while True:
                         f.write(previous+","+insert)
                     with open('software_lists.txt', 'r') as f:
                         previous = f.read().strip()
+            # delete the software from the list
             elif modify_list_ch == 2:
                 remove = int(
                     input("Enter numeric value of current software list: "))
@@ -100,10 +120,12 @@ while True:
             else:
                 print("Enter valid input")
 
+    # Providing the valid input
     elif ch > 4:
         print("Please enter valid input...")
         pyttsx3.speak("Please provide valid input.")
 
+    # For exiting the program files
     else:
         print("\nBye")
         pyttsx3.speak(
